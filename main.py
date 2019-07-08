@@ -2,6 +2,10 @@ import requests as req
 import sys
 import base64
 import json
+from PIL import Image
+from io import BytesIO
+from imagetoansi import image_to_ansi
+import textwrap as tw
 
 if len(sys.argv) >= 4:
     SUBREDDIT = sys.argv[1]
@@ -46,6 +50,12 @@ if len(sys.argv) >= 4:
         #The thing we're probably looking for is its `domain` for websites
         for i in content_list["data"]["children"]:
             print(u"[\u001b[4mr/" + i["data"]["subreddit"] + u"\u001b[0m] From \u001b[7mu/" + i["data"]["author"] + u"\u001b[0m: '" + i["data"]["title"] + "' with " + str(i["data"]["ups"]-i["data"]["downs"]) + " points")
+            try: #Get preview images
+                imgdata = s.get(i["data"]["preview"]["images"][0]["resolutions"][0]["url"])
+                img = Image.open(BytesIO(imgdata.content))
+                img = img.resize((32, 32)) #Resize it to give it that great console feel
+                image_to_ansi(img)
+            except: print(tw.indent((i["data"]["selftext"]) + "\n", "\t"))
 else:
     print("Please input a subreddit, sans the 'r/'. You may also be missing your client id and secret, which you can get at 'https://www.reddit.com/prefs/apps'.")
     print("python main.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [sort_method (OPTIONAL)]")
