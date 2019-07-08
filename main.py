@@ -77,4 +77,4 @@ if len(sys.argv) >= 3:
     printRedditListing(listing)
 else:
     print("Please input a subreddit, sans the 'r/'. You may also be missing your client id and secret, which you can get at 'https://www.reddit.com/prefs/apps'.")
-    print("python main.py [SUBREDDIT] [client_id] [client_secret] [sort_method (OPTIONAL)]")
+    print("python main.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [sort_method (OPTIONAL)]")
