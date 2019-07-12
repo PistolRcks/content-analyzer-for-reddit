@@ -10,10 +10,6 @@ from imagetoansi import image_to_ansi
 import textwrap as tw
 
 def getRedditListing(subreddit, client_id, client_secret, sort_method = "top"):
-    subreddit = sys.argv[1]
-    client_id = sys.argv[2]
-    client_secret = sys.argv[3]
-
     #Required for HTTP Basic Authorization
     auth = client_id+":"+client_secret
     auth_encoded = base64.b64encode(auth.encode('utf-8')) #Needs to be a string in the header later
