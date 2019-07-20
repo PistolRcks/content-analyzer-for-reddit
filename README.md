@@ -16,3 +16,7 @@ Allows you to (currently only) read Reddit through the console and get Listings 
 
 ## Credits
 * [image-to-ansi.py](https://gist.github.com/klange/1687427) by Kevin Lange and Micah Eliott
+* Bias Ratings (`bias-analyzer/AllSidesBiasRatings.json`) from [AllSides.com](https://www.allsides.com/unbiased-balanced-news)
+
+## LICENSE NOTICE
+All code in this repository is licensed under GPLv3 ***EXCEPT FOR*** the AllSides.com Bias Ratings file (`bias-analyzer/AllSidesBiasRatings.json`), which is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License.](https://creativecommons.org/licenses/by-nc/4.0/) A copy of the license notice is also included in the file.

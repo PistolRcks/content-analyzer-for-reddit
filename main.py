@@ -9,7 +9,13 @@ from io import BytesIO
 from imagetoansi import image_to_ansi
 import textwrap as tw
 
-def getRedditListing(subreddit, client_id, client_secret, sort_method = "top"):
+def getRedditListing(subreddit, client_id, client_secret, sort_method = "top", info_payload = {
+    'raw_json' : 1,
+    't' : 'day', #Time amount for top and controversial
+    'g' : 'US', #Region for hot
+    'limit' : 100,
+    'include_categories' : False
+}):
     #Required for HTTP Basic Authorization
     auth = client_id+":"+client_secret
     auth_encoded = base64.b64encode(auth.encode('utf-8')) #Needs to be a string in the header later
@@ -32,14 +38,6 @@ def getRedditListing(subreddit, client_id, client_secret, sort_method = "top"):
         response = s.post("https://www.reddit.com/api/v1/access_token", data=initial_payload)
         # print(response.json())
         #Now to get the info
-        info_payload = {
-            'raw_json' : 1,
-            't' : 'day', #Time amount for top and controversial
-            'g' : 'US', #Region for hot
-            'count' : 1,
-            'limit' : 100,
-            'include_categories' : False
-        }
         response = s.get('http://www.reddit.com/r/' + subreddit + '/' + sort_method + "/.json", params=info_payload)
         content_list = response.json()
         # print(json.dumps(content_list, indent=2, sort_keys=True)) #Prettyprint the JSON, but just for debugging
@@ -66,11 +64,16 @@ def printRedditListing(listing):
                     for j in range(len(wrapped_text[i])):
                         print(tw.indent(wrapped_text[i][j], "\t"))
                     print("\n") #Print another newline to make it look nice
+
 #Main
-if len(sys.argv) >= 3:
-    try: listing = getRedditListing(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
-    except: listing = getRedditListing(sys.argv[1],sys.argv[2],sys.argv[3])
-    printRedditListing(listing)
-else:
-    print("Please input a subreddit, sans the 'r/'. You may also be missing your client id and secret, which you can get at 'https://www.reddit.com/prefs/apps'.")
-    print("python main.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [sort_method (OPTIONAL)]")
+def main():
+    if len(sys.argv) >= 3:
+        try: listing = getRedditListing(sys.argv[1],sys.argv[2],sys.argv[3],sys.argv[4])
+        except: listing = getRedditListing(sys.argv[1],sys.argv[2],sys.argv[3])
+        printRedditListing(listing)
+    else:
+        print("Please input a subreddit, sans the 'r/'. You may also be missing your client id and secret, which you can get at 'https://www.reddit.com/prefs/apps'.")
+        print("python main.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [sort_method (OPTIONAL)]")
+
+if __name__ == "__main__":
+    main()
