@@ -7,13 +7,14 @@ I had started to notice that most link posts in reddit's [r/news](https://www.re
 * [Matplotlib](https://matplotlib.org/)
 
 ## How to Use
-    python analyze-bias.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [SORT_METHOD] [LISTINGS]
+    python analyze-bias.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [SORT_METHOD] [TIMEFRAME] [LISTINGS]
 
 (NB: Most arguments are exactly the same as the in main.py!)
 * `SUBREDDIT` - Target subreddit, sans the 'r/' prefix
 * `CLIENT_ID` - The ID from a dummy app that you have to create yourself [here.](https://www.reddit.com/prefs/apps) Used for authorization.
 * `CLIENT_SECRET` - The secret from a dummy app that you have to create yourself. Used for authorization.
 * `SORT_METHOD` - A string detailing the sort method. Choose from `top`, `best`, `hot`, `rising`, `controversial`, and `new`.
+* `TIMEFRAME` - A string detailing the timeframe from which to get the posts. Choose from the last `hour`, `day`, `week`, `month`, `year`,or from `all` posts.
 * `LISTINGS` - The integer amount of listings of 100 different reddit posts to analyze (i.e. One listing will contain 100 reddit posts, and two will contain 200 posts, etc.). The more listings acquired, the more accurate your results will be. (NB: It will stop searching for listings if there is nothing else to search through, even if you specified more listings to analyze)
 
 ## Some Issues/Things to Consider

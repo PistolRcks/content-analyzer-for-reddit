@@ -39,13 +39,13 @@ rating_ids = {
 }
 
 #Not so optimized, but whatever
-loops = int(sys.argv[5])
+loops = int(sys.argv[6])
 i = 0 #Counting
 after = None
 for loop in range(loops):
     listing = getRedditListing(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], {
         'raw_json' : 1,
-        't' : 'week',
+        't' : sys.argv[5],
         'g' : 'US',
         'limit' : 100,
         'include_categories' : False,
