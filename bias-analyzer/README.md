@@ -25,3 +25,6 @@ I had started to notice that most link posts in reddit's [r/news](https://www.re
 * The way in which the links are checked if they have a bias rating or not could be optimized, rather than brute-forcing.
 * The script is not optimized to ignore pictures or text posts.
 * The script, in general, is not written well, and can be optimized.
+
+## LICENSE NOTICE
+All code in this repository is licensed under GPLv3 ***EXCEPT FOR*** the AllSides.com Bias Ratings file (`bias-analyzer/AllSidesBiasRatings.json`), which is licensed under a [Creative Commons Attribution-NonCommercial 4.0 International License.](https://creativecommons.org/licenses/by-nc/4.0/) A copy of the license notice is also included in the file.
