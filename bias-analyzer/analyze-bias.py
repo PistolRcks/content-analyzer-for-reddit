@@ -1,8 +1,10 @@
 import json
 import sys
+import re
+import functools
+import matplotlib.pyplot as plt
 sys.path.insert(0, './..') #Make sure to get the path from the directory above
 from main import getRedditListing
-import re
 
 #Get rid of the CRAP TOP LEVEL DOMAINS BECAUSE WE DON'T NEED THAT CRAP (mainly so that multinational sites like bbc are handled correctly)
 def stripTLDomain(str):
@@ -17,14 +19,15 @@ with open("AllSidesBiasRatings.json", "r") as f:
 # print(json.dumps(bias_data, sort_keys = True, indent = 2))
 
 ratings = {
-    "left": 0,
-    "lean_left": 0,
-    "center": 0,
-    "lean_right": 0,
-    "right": 0,
-    "mixed": 0,
-    "inconclusive": 0
+    "left": [0, "#2e65a1"],
+    "lean_left": [0, "#9dc8eb"],
+    "center": [0, "#9766a0"],
+    "lean_right": [0, "#cb9a98"],
+    "right": [0, "#cb2127"],
+    "mixed": [0, "#3e8f3e"],
+    "inconclusive": [0, "#dddddd"]
 }
+
 rating_ids = {
     "71": "left",
     "72": "lean_left",
@@ -64,12 +67,12 @@ for loop in range(loops):
             #Check if the site matches (stripping the top level domain for reasons stated previously)
             if stripTLDomain(site["url"]) == stripTLDomain(thing["data"]["domain"]):
                 sys.stdout.write("Matched " + site["url"])
-                ratings[rating_ids[str(site["bias_rating"])]] += 1
+                ratings[rating_ids[str(site["bias_rating"])]][0] += 1
                 found = True
                 break
         if not found:
             sys.stdout.write(thing["data"]["domain"] + " has no match!")
-            ratings["inconclusive"] += 1
+            ratings["inconclusive"][0] += 1
         sys.stdout.write("\x1b[K\r") #Clear the line
     sys.stdout.flush()
 
@@ -79,5 +82,21 @@ for loop in range(loops):
 
 #Print results
 print("The results are in!")
+#There's got to be a better way to do this...
+total = 0
+for k,v in ratings.items(): total += v[0]
 for k,v in ratings.items():
-    print(k + ": " + str(round(v/sum(ratings.values())*100, 3)) + "%")
+    print(k + ": " + str(round(v[0]/total*100, 3)) + "%")
+
+#Remove excess results to make the pie chart look nice (comprehensions are wierd)
+filtered_ratings = {k: v for k, v in ratings.items() if v[0] is not 0}
+colors = [i[1] for i in filtered_ratings.values()]
+values = [i[0] for i in filtered_ratings.values()]
+
+#Show pie plot
+fig, ax = plt.subplots()
+ax.pie(values, labels=filtered_ratings.keys(), autopct='%1.2f%%', shadow=True, startangle=90, colors=colors)
+ax.axis("equal")
+plt.title("Political Bias Composition of the Subreddit r/"+sys.argv[1])
+
+plt.show()

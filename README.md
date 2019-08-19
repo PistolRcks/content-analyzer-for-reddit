@@ -2,9 +2,9 @@
 Allows you to (currently only) read Reddit through the console and get Listings from Reddit
 
 ## Requirements
-* Python 3.7
-* Python Requests Library
-* Python Pillow Library
+* [Python 3.7](https://www.python.org/downloads/)
+* [Requests](https://pypi.org/project/requests/)
+* [Pillow](https://pypi.org/project/Pillow/)
 
 ## Usage
     python main.py [SUBREDDIT] [CLIENT_ID] [CLIENT_SECRET] [sort_method (OPTIONAL)]
