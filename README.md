@@ -1,5 +1,5 @@
 # Content Analyzer (for Reddit)
-Allows you to (currently only) read Reddit through the console and get Listings from Reddit
+Allows you to read Reddit through the console and get Listings from Reddit
 
 ## Requirements
 * [Python 3.7](https://www.python.org/downloads/)
