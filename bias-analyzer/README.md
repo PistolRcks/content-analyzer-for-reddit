@@ -17,13 +17,14 @@ I had started to notice that most link posts in reddit's [r/news](https://www.re
 * `TIMEFRAME` - A string detailing the timeframe from which to get the posts. Choose from the last `hour`, `day`, `week`, `month`, `year`,or from `all` posts.
 * `LISTINGS` - The integer amount of listings of 100 different reddit posts to analyze (i.e. One listing will contain 100 reddit posts, and two will contain 200 posts, etc.). The more listings acquired, the more accurate your results will be. (NB: It will stop searching for listings if there is nothing else to search through, even if you specified more listings to analyze)
 
-## Some Issues/Things to Consider
+## Some Issues/Shortcomings/Things to Consider
 * The AllSides bias data (which they so kindly gave to me for the purposes of this project) required quite a bit of formatting (in terms of the links), because they would otherwise not be so nice to parse through.
 * The bias data seems to need to be expanded, as most of my testing led to more than 50% inconclusive data.
 * The way that top level domains are handled could also probably be changed, as that may be making the data more inconclusive.
 * The way in which the listings are collected could be optimized, as it would be more efficient to get all of the listings in one session and then parse the results, instead of utilizing multiple sessions (but that would be an optimization in `main.py`).
 * The way in which the links are checked if they have a bias rating or not could be optimized, rather than brute-forcing.
 * The script is not optimized to ignore pictures or text posts.
+* The script ***only*** checks the links of posts, and ***does not*** consider the title of the post, the title of the article, or the text of any comments therein.  
 * The script, in general, is not written well, and can be optimized.
 
 ## LICENSE NOTICE
