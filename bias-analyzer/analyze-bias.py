@@ -3,16 +3,16 @@ import sys
 import re
 import functools
 import matplotlib.pyplot as plt
-sys.path.insert(0, './..') #Make sure to get the path from the directory above
+sys.path.insert(0, './..') # Make sure to get the path from the directory above
 from main import getRedditListing
 
-#Get rid of the CRAP TOP LEVEL DOMAINS BECAUSE WE DON'T NEED THAT CRAP (mainly so that multinational sites like bbc are handled correctly)
+# Get rid of the CRAP TOP LEVEL DOMAINS BECAUSE WE DON'T NEED THAT CRAP (mainly so that multinational sites like bbc are handled correctly)
 def stripTLDomain(str):
     return re.sub(r"\.((co)|(org)|(net)|(us)|(eu)|(uk)|(ca)).*", "", str)
 
-#Set up the JSON
+# Set up the JSON
 with open("AllSidesBiasRatings.json", "r") as f:
-    #We have use only the JSON (not the comments) or else the JSON parser gives a fit
+    # We have use only the JSON (not the comments) or else the JSON parser gives a fit
     bias_data = f.readlines()[6]
     bias_data = json.loads(bias_data)
 
@@ -25,7 +25,8 @@ ratings = {
     "lean_right": [0, "#cb9a98"],
     "right": [0, "#cb2127"],
     "mixed": [0, "#3e8f3e"],
-    "inconclusive": [0, "#dddddd"]
+    "inconclusive": [0, "#dddddd"],
+    "text_post": [0, "#00d400"]
 }
 
 rating_ids = {
@@ -38,9 +39,9 @@ rating_ids = {
     "2690": "inconclusive"
 }
 
-#Not so optimized, but whatever
+# Not so optimized, but whatever
 loops = int(sys.argv[6])
-i = 0 #Counting
+i = 0 # Counting
 after = None
 for loop in range(loops):
     listing = getRedditListing(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], {
@@ -52,9 +53,9 @@ for loop in range(loops):
         'after' : after
     })
 
-    after = listing["data"]["after"] #Move on with the listings
+    after = listing["data"]["after"] # Move on with the listings
     if loop > 0:
-        sys.stdout.write("\x1b[1A\x1b[K\r") #Clear the "loop" line on loops greater than the first
+        sys.stdout.write("\x1b[1A\x1b[K\r") # Clear the "loop" line on loops greater than the first
     sys.stdout.write("----Loop " + str(loop + 1) + "----\n")
 
 
@@ -64,10 +65,16 @@ for loop in range(loops):
         sys.stdout.write("["+str(i)+"]: ")
         # print("Stripped top level domain: " + stripTLDomain(thing["data"]["domain"]))
         for site in bias_data:
-            #Check if the site matches (stripping the top level domain for reasons stated previously)
-            if stripTLDomain(site["url"]) == stripTLDomain(thing["data"]["domain"]):
+            # Check if the site matches (stripping the top level domain for reasons stated previously)
+            if stripTLDomain(thing["data"]["domain"]) == stripTLDomain(site["url"]):
                 sys.stdout.write("Matched " + site["url"])
                 ratings[rating_ids[str(site["bias_rating"])]][0] += 1
+                found = True
+                break
+            # Check if the post was a text post
+            elif stripTLDomain(thing["data"]["domain"]) == f"self.{sys.argv[1]}":
+                sys.stdout.write("Post was a text post.")
+                ratings["text_post"][0] += 1
                 found = True
                 break
         if not found:
@@ -80,23 +87,23 @@ for loop in range(loops):
         print("\nNothing left to analyze! Breaking.")
         break
 
-#Print results
+# Print results
 print("The results are in!")
-#There's got to be a better way to do this...
+# There's got to be a better way to do this...
 total = 0
 for k,v in ratings.items(): total += v[0]
 for k,v in ratings.items():
     print(k + ": " + str(round(v[0]/total*100, 3)) + "%")
 
-#Remove excess results to make the pie chart look nice (comprehensions are wierd)
-filtered_ratings = {k: v for k, v in ratings.items() if v[0] is not 0}
+# Remove excess results to make the pie chart look nice (comprehensions are wierd)
+filtered_ratings = {k: v for k, v in ratings.items() if v[0] != 0}
 colors = [i[1] for i in filtered_ratings.values()]
 values = [i[0] for i in filtered_ratings.values()]
 
-#Show pie plot
+# Show pie plot
 fig, ax = plt.subplots()
 ax.pie(values, labels=filtered_ratings.keys(), autopct='%1.2f%%', shadow=True, startangle=90, colors=colors)
 ax.axis("equal")
-plt.title("Political Bias Composition of the Subreddit r/"+sys.argv[1])
+plt.title(f"Bias composition of r/{sys.argv[1]} among {sys.argv[4]} posts from the last {sys.argv[5]}")
 
 plt.show()

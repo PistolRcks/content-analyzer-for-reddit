@@ -23,7 +23,7 @@ I had started to notice that most link posts in reddit's [r/news](https://www.re
 * The way that top level domains are handled could also probably be changed, as that may be making the data more inconclusive.
 * The way in which the listings are collected could be optimized, as it would be more efficient to get all of the listings in one session and then parse the results, instead of utilizing multiple sessions (but that would be an optimization in `main.py`).
 * The way in which the links are checked if they have a bias rating or not could be optimized, rather than brute-forcing.
-* The script is not optimized to ignore pictures or text posts.
+* The script is not optimized to ignore pictures ~or text posts~. (Fixed, now shows text posts as a separate section of the graph)
 * The script ***only*** checks the links of posts, and ***does not*** consider the title of the post, the title of the article, or the text of any comments therein.  
 * The script, in general, is not written well, and can be optimized.
 
